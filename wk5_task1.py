@@ -2,7 +2,7 @@ from pyspark import SparkConf, SparkContext
 from operator import add
 import re
 
-sc = SparkContext(conf=SparkConf().setAppName("MyApp").setMaster("local"))
+sc = SparkContext(conf=SparkConf().setAppName("MyApp").setMaster('spark://WCHR-HP-01:7077'))
 
 
 def parse_article(line):
@@ -14,6 +14,7 @@ def parse_article(line):
                0,len(words) - 1) if words[i].lower() == 'narodnaya']
         return bigram
     except ValueError as e:
+        print e
         return []
 
 wiki = sc.textFile(
