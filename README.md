@@ -1,32 +1,13 @@
-## How to use LTI interface
+## Aggregate By Key Notes
+0 is the starting value
+The 1st closure (lambda v1,v2: v1+1) works iteratively over all records with the same key but within a partition.
+Say the 1st 3 records key, value pairs are:
+*1\t5
+*2\t6
+*1\t7
+For userId(key) 1, the 1st iteration takes the values 0(start value) and 5, and returns result of adding 0 and 1.
+For the 2nd iteration for key 1, it takes values 1 (from previous calculation) and 7 from next record, and returns result of adding 1 to previous sum 1,
+So key 1 now has a aggregated value of 2 and so on…
+Note that the actual values 5 and 7 are not used directly but are just proxies to tell how many records there are for a key , each counting only once
 
-While completing the programming assignment, you have to submit your assignment. In order to make submission, you have to create a notebook. When you created a Jupyter notebook, in the right top corner you could see a dropdown with tasks and a button "Submit assignment". You have to choose the appropriate task (the task that you have chosen from Coursera Interface) and press the blue button. 
-
-After that you will see a popup window with notification that your task have submitted. 
-
-In some minutes you will get a popup window with submission status: your grade and results from the grading system server.
-
-
-## Notes
-
-* The sample dataset is located at /data/wiki/en_articles_part.
-* The sample dataset of Twitter Graph is located in local FileSystem at /data/twitter.
-* The dataset with stop-words is located in local FileSystem on path /datasets.
-* The system grades standard output and error streams from the last non-empty cell. 
-* If you have clicked "Open tool" and received "404" error, please reload the page.
-
-### Spark assignment notes
-
-You can use Demo notebook as example. Demo notebook parses input dataset, clear out punctuations and other junk symbols and split the text by words.
-
-* In this case you shouldn't worry about stderr. It is enough if you will give only stdout in your notebook.
-* You should eliminate extra symbols in output (such as quotes, brackets etc.). Let's see on the Demo notebook. It is easier to print wiki.take(1) instead of traverse RDD using "for" cycle. But in this case a lot of junk symbols will be printed like
-
-[[u'Anarchism',
-  u'is',
-  u'often',
-  u'defined',
-  u'as',
-...
-]]
-
+The 2nd function passed (operator.add) adds up the values coming from the 1st lambda but it does this across different partitions
