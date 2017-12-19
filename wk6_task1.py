@@ -16,7 +16,7 @@ def step(item):
 def complete(item):
   v, old_d, new_d = item[0], item[1][0], item[1][1]
   return (v, old_d if old_d is not None else new_d)
-# import pdb; pdb.set_trace()
+import pdb; pdb.set_trace()
 n = 2  # number of partitions
 edges = sc.textFile("/data/twitter/twitter_sample_xs.txt").map(parse_edge).cache()
 forward_edges = edges.map(lambda e: (e[1], e[0])).partitionBy(n).persist()
@@ -26,8 +26,10 @@ x = 2
 d = 0
 distances = sc.parallelize([(x, d)]).partitionBy(n)
 while True:
-  candidates = distances.join(forward_edges, n).map(step)
-  new_distances = distances.fullOuterJoin(candidates, n).map(complete, True).persist()
+  candidates_pre = distances.join(forward_edges, n)
+  candidates = candidates_pre.map(step)
+  new_distances_pre = distances.fullOuterJoin(candidates, n)
+  new_distances = new_distances_pre.map(complete, True).persist()
   count = new_distances.filter(lambda i: i[1] == d + 1).count()
   if count > 0:
     d += 1
