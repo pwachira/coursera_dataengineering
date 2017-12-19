@@ -40,9 +40,9 @@ def complete(item):
   return (v,(old_d if old_d is not None else new_d, path if path is not None else ()))
 
 
-n = 2  # number of partitions
+n = 400  # number of partitions
 
-edges = sc.textFile("/data/twitter/twitter_sample_small.txt").map(parse_edge).cache()
+edges = sc.textFile("/data/twitter/twitter_sample.txt").map(parse_edge).cache()
 
 forward_edges = edges.map(lambda e: (e[1], e[0])).partitionBy(n).persist()
 
