@@ -1,10 +1,5 @@
 from pyspark import SparkContext, SparkConf
 import time
-# try:
-    # sc.close()
-# except e:
-   # print e
-   # print 'sc doesnt exist or cannot be closed'
 t1 = time.time()
 sc = SparkContext(conf= SparkConf().setAppName("App").setMaster('local'))
 
@@ -25,11 +20,6 @@ def step(item):
   return (next_v, (prev_d + 1, tuple(new_path)))
 
 def complete(item):
-  # v, old_d, new_d, path = item[0], item[1][0][0] if item[1][0] is not None else None, \
-      # item[1][1][0] if item[1][1] is not None else None, \
-      # item[1][1][1] if item[1][1] is not None else None
-  # return (v,(old_d if old_d is not None else new_d, path if path is not None else ()))
-
   v = item[0]
   old_d = item[1][0][0] if item[1][0] is not None else None
   new_d = None
